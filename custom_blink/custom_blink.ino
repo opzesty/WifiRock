@@ -23,16 +23,53 @@ Turns an LED on for one second, then off for one second, repeatedly.
   http://www.arduino.cc/en/Tutorial/Blink
 */
 
+#include <ESP8266WiFi.h>
+
+const char* ssid     = "YOUR ROUTER SSID";
+const char* password = "YOUR PASSORD";   
+
+int wifiStatus;
+
 // the setup function runs once when you press reset or power the board
 void setup() {
   // initialize digital pin LED_BUILTIN as an output.
-  pinMode(D1, OUTPUT);
+  //pinMode(D1, OUTPUT);
+      
+  Serial.begin(115200);\
+  delay(200);
+ 
+  // We start by connecting to a WiFi network
+ 
+  Serial.println();
+  Serial.println();
+  Serial.print("Your are connecting to;");
+  Serial.println(ssid);
+  
+  WiFi.begin(ssid, password);
+  
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
 }
 
 // the loop function runs over and over again forever
 void loop() {
-  digitalWrite(D1, HIGH);   // turn the LED on (HIGH is the voltage level)
-  delay(500);                       // wait for a second
-  digitalWrite(D1, LOW);    // turn the LED off by making the voltage LOW
-  delay(500);                       // wait for a second
+  //digitalWrite(D1, HIGH);   // turn the LED on (HIGH is the voltage level)
+  //delay(500);                       // wait for a second
+  //digitalWrite(D1, LOW);    // turn the LED off by making the voltage LOW
+  //delay(500);                       // wait for a second
+
+  wifiStatus = WiFi.status();
+  if(wifiStatus == WL_CONNECTED){
+     Serial.println("");
+     Serial.println("Your ESP is connected!");  
+     Serial.println("Your IP address is: ");
+     Serial.println(WiFi.localIP());  
+  }
+  else{
+    Serial.println("");
+    Serial.println("WiFi not connected");
+  }
+  delay(1000); // check for connection every once a second
 }
